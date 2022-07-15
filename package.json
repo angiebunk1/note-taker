@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/angiebunk1/note-taker#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "generate-unique-id": "^2.0.1"
   }
 }
