@@ -17,12 +17,18 @@ app.use(express.static('./Develop/public'));
 
 
 app.get('/api/notes', (req, res) => {
-    res.json(notes);
+    try {
+        const data = fs.readFileSync('./Develop/db/db.json', 'utf8');
+        console.log(data)
+        console.log(JSON.parse(data)); 
+        res.json(JSON.parse(data))
+      } catch (err) {
+        res.json(err);
+      }
 });
 
 app.post('/api/notes', (req, res) => {
     let data = {
-
         title: req.body.title,
         text: req.body.text,
         id: generateUniqueId()
@@ -41,8 +47,13 @@ app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, './Develop/public/notes.html'));
 });
 
-
-
+app.delete('/api/notes/:id', (req, res) => {
+    let remainingNotes = notes.filter(data => data.id != req.params.id);
+    console.log(remainingNotes)
+    fs.writeFile('./Develop/db/db.json', JSON.stringify(remainingNotes), ()=>{
+        res.json(remainingNotes);
+    })    
+});
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
